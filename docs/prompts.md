@@ -104,3 +104,28 @@ historical raises so history ends exactly at the current salary. Re-running wipe
 in one transaction, so the result is identical every time, timestamps included. The generated
 employees are checked against the API's own create schema. Measured: about 0.4 s for 10,000
 employees and ~26,500 history rows.
+
+## 8. Frontend (Phase 7)
+
+**Asked:** React + Vite + TypeScript with a component library, React Router, TanStack Query and a
+typed API client. Pages for the employee list (server-side paging, sorting, filters, debounced
+search, URL-synced state), employee detail with salary history and a change-salary dialog,
+create/edit forms that mirror the API's validation, and a currency-aware insights dashboard.
+Loading, empty and error states, delete confirmation, accessibility and responsiveness. Commits
+split by feature.
+
+**Decided:** MUI for components. List state lives entirely in the URL. Salary filters are typed
+in major units and converted to minor units with string arithmetic, never floats. Stale-version
+409s show a "changed by someone else" message with a reload instead of overwriting. Charts are
+plain MUI boxes rather than a charting library, which keeps a dependency out and keeps each bar
+keyboard- and screen-reader-accessible. Insights pick a currency (the largest by headcount by
+default) and only show money figures within it.
+
+## 9. Frontend tests (Phase 8)
+
+**Asked:** Vitest + Testing Library for key logic and components (filters and URL state, money
+formatting, form validation, salary dialog), fast and deterministic with the API layer mocked.
+
+**Decided:** Pure modules (money, list params, form validation, insights summary, API client) are
+tested directly. Components are tested through the mocked `employeesApi` module rather than a
+mock server. Only `Date` is faked, so "today" is fixed without fake timers.
