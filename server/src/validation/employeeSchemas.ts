@@ -18,7 +18,7 @@ const country = z
   .toUpperCase()
   .refine((code) => findCountry(code) !== undefined, 'Unsupported country');
 
-const currency = z
+export const currencySchema = z
   .string()
   .trim()
   .toUpperCase()
@@ -49,7 +49,7 @@ const profileShape = {
 export const createEmployeeSchema = z.strictObject({
   ...profileShape,
   country,
-  currency,
+  currency: currencySchema,
   salaryMinor,
 });
 
@@ -57,7 +57,7 @@ export const updateEmployeeSchema = z.strictObject({ ...profileShape, version })
 
 export const salaryChangeSchema = z.strictObject({
   salaryMinor,
-  currency,
+  currency: currencySchema,
   effectiveDate: isoDate,
   reason: text(500),
   version,
@@ -85,7 +85,7 @@ export const listEmployeesQuerySchema = z
     country: country.optional(),
     department: optionalText,
     jobTitle: optionalText,
-    currency: currency.optional(),
+    currency: currencySchema.optional(),
     minSalary: queryInt.min(0).optional(),
     maxSalary: queryInt.min(0).optional(),
   })

@@ -79,3 +79,14 @@ column. Oversized page sizes are capped to 100 rather than rejected. Unknown bod
 rejected, which is also how a country change on edit is refused. A hire date cannot move past
 the first salary date. The service takes an injectable clock so date rules test
 deterministically. `GET /api/meta` serves the filter options.
+
+## 6. Insights API (Phase 5)
+
+**Asked:** Aggregations in SQL where sensible; medians and percentiles correct for odd, even and
+empty groups; everything grouped by currency, including distribution bands; tests on small
+deterministic fixtures including empty and single-row groups.
+
+**Decided:** Count, min, max and average come from SQL `GROUP BY`; median, p25 and p75 come from
+a pure interpolating `percentile` function over salaries streamed in sorted order. Department,
+job title, distribution and earner views all take a required `currency`. Bands are equal-width
+between the currency's min and max; a group where everyone earns the same gets one band.
