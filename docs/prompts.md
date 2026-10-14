@@ -50,3 +50,17 @@ whitelisted. Salary filters and sorts are scoped to a currency. Medians use line
 in a pure function over salaries streamed in sorted order. Edits and salary changes carry a
 `version` and return 409 when stale. Currency must match the country; country is fixed after
 creation; salary changes cannot be future-dated.
+
+## 4. Backend foundation (Phase 3)
+
+**Asked:** Express + TypeScript layered as routes → controllers → services → repositories;
+better-sqlite3 with versioned SQL migrations, WAL and foreign keys; Zod validation; a central
+error handler with consistent JSON errors; request logging; validated env config; a health
+endpoint; indexes for every filter and sort column.
+
+**Decided:** Migrations are numbered `.sql` files in `server/migrations`, tracked in
+`schema_migrations` and applied one transaction each. Tables are `STRICT` with `CHECK`
+constraints as a second line of defence behind Zod. Logging is a tiny JSON-lines logger rather
+than a logging library, since we only need one line per request and per error. The app is built
+by a `createApp({ db, logger })` factory so tests run against an in-memory database with
+Supertest. Test files are excluded from the production build via `tsconfig.build.json`.
