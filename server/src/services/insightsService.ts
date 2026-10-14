@@ -42,7 +42,7 @@ function groupSalaries(rows: GroupSalary[]): Map<string, number[]> {
 }
 
 /** Joins SQL aggregates with percentiles taken from the same groups' sorted salaries. */
-export function combineStats(aggregates: GroupAggregate[], salaries: GroupSalary[]): GroupStats[] {
+function combineStats(aggregates: GroupAggregate[], salaries: GroupSalary[]): GroupStats[] {
   const salariesByGroup = groupSalaries(salaries);
   return aggregates.map((aggregate) => {
     const sorted = salariesByGroup.get(groupKey(aggregate.key, aggregate.currency)) ?? [];

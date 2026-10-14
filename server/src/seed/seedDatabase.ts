@@ -2,7 +2,7 @@ import type { Db } from '../db/connection.js';
 import { createSeedRepository } from '../repositories/seedRepository.js';
 import { generateEmployees, type GenerateOptions } from './generateEmployees.js';
 
-export const DEFAULT_SEED_OPTIONS: GenerateOptions = {
+const DEFAULT_SEED_OPTIONS: GenerateOptions = {
   count: 10_000,
   seed: 20_250_630,
   referenceDate: '2025-06-30',

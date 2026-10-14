@@ -10,7 +10,7 @@ import { employeesApi } from '../../api/employees';
 import type { CreateEmployeeInput, SalaryChangeInput, UpdateEmployeeInput } from '../../api/types';
 import { toApiQuery, type ListParams } from './listParams';
 
-export const employeeKeys = {
+const employeeKeys = {
   all: ['employees'] as const,
   list: (params: ListParams) => [...employeeKeys.all, 'list', toApiQuery(params)] as const,
   detail: (id: number) => [...employeeKeys.all, 'detail', id] as const,

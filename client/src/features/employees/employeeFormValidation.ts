@@ -64,7 +64,7 @@ function dateError(value: string, today: string): string | undefined {
   return undefined;
 }
 
-export function salaryError(value: string, currency: string | undefined): string | undefined {
+function salaryError(value: string, currency: string | undefined): string | undefined {
   if (value.trim() === '') return 'Must not be empty';
   if (currency === undefined) return 'Pick a country first';
   const minor = toMinorUnits(value, currency);

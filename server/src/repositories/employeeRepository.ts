@@ -87,7 +87,7 @@ function escapeLike(value: string): string {
   return value.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
 
-export function buildWhereClause(filters: EmployeeFilters): { where: string; params: SqlParams } {
+function buildWhereClause(filters: EmployeeFilters): { where: string; params: SqlParams } {
   const conditions: string[] = [];
   const params: SqlParams = {};
 
@@ -121,7 +121,7 @@ export function buildWhereClause(filters: EmployeeFilters): { where: string; par
   return { where: conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '', params };
 }
 
-export function buildOrderBy(sort: SortField, order: 'asc' | 'desc'): string {
+function buildOrderBy(sort: SortField, order: 'asc' | 'desc'): string {
   const direction = order === 'asc' ? 'ASC' : 'DESC';
   // Amounts in different currencies are not comparable, so salary order is per currency. Using the
   // same direction for both lets SQLite walk the (currency, salary_minor) index either way.
