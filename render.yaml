@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: salary-management
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /app/data/salary.db
+      - key: SEED_ON_EMPTY
+        value: 'true'
+    # SQLite needs a persistent disk; without one, data resets on every deploy.
+    disk:
+      name: salary-data
+      mountPath: /app/data
+      sizeGB: 1

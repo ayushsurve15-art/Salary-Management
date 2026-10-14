@@ -129,3 +129,16 @@ formatting, form validation, salary dialog), fast and deterministic with the API
 **Decided:** Pure modules (money, list params, form validation, insights summary, API client) are
 tested directly. Components are tested through the mocked `employeesApi` module rather than a
 mock server. Only `Date` is faked, so "today" is fixed without fake timers.
+
+## 10. Deployment readiness (Phase 9)
+
+**Asked:** Express serves the built client so the app deploys as one service; a multi-stage
+Dockerfile, `.dockerignore`, env example and `render.yaml`; migrations on boot and an env flag to
+seed an empty database on first boot; a GitHub Actions workflow running lint, typecheck, tests
+and build.
+
+**Decided:** The server serves `client/dist` whenever it exists, with an `index.html` fallback
+for client-side routes, so `npm run build && npm start` behaves like production locally.
+`SEED_ON_EMPTY=true` seeds only when there are no employees, so restarts never wipe data. The
+runtime image installs only the server's production dependencies and runs as the `node` user,
+with the database on a mounted disk. CI also checks formatting and builds the Docker image.

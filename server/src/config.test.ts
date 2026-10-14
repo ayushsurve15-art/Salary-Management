@@ -7,6 +7,7 @@ describe('loadConfig', () => {
       env: 'development',
       port: 4000,
       databasePath: 'data/salary.db',
+      seedOnEmpty: false,
     });
   });
 
@@ -15,9 +16,15 @@ describe('loadConfig', () => {
       NODE_ENV: 'production',
       PORT: '8080',
       DATABASE_PATH: '/data/app.db',
+      SEED_ON_EMPTY: 'true',
     });
 
-    expect(config).toEqual({ env: 'production', port: 8080, databasePath: '/data/app.db' });
+    expect(config).toEqual({
+      env: 'production',
+      port: 8080,
+      databasePath: '/data/app.db',
+      seedOnEmpty: true,
+    });
   });
 
   it('rejects an invalid port with a readable message', () => {

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { IN_MEMORY, openDatabase, type Db } from '../db/connection.js';
 import { runMigrations } from '../db/migrate.js';
-import { seedDatabase } from './seedDatabase.js';
+import { seedDatabase, seedIfEmpty } from './seedDatabase.js';
 
 const options = { count: 300, seed: 11, referenceDate: '2025-06-30' };
 
@@ -36,5 +36,16 @@ describe('seedDatabase', () => {
 
     expect(count('employees')).toBe(300);
     expect(db.prepare('SELECT * FROM employees ORDER BY id').all()).toEqual(firstRun);
+  });
+
+  it('seeds an empty database on first boot', () => {
+    expect(seedIfEmpty(db, options)).toMatchObject({ employees: 300 });
+  });
+
+  it('leaves a database that already has employees alone', () => {
+    seedDatabase(db, { ...options, count: 5 });
+
+    expect(seedIfEmpty(db, options)).toBeNull();
+    expect(count('employees')).toBe(5);
   });
 });

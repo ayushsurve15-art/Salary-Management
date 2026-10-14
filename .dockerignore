@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/coverage
+**/data
+*.db
+*.sqlite*
+.env
+.env.*
+.git
+.github
+docs
+*.log

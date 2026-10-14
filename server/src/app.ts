@@ -7,6 +7,7 @@ import { systemClock, type Clock } from './domain/dates.js';
 import type { Logger } from './logger.js';
 import { apiNotFound, errorHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
+import { clientRoutes } from './middleware/serveClient.js';
 import { createEmployeeRepository } from './repositories/employeeRepository.js';
 import { createHealthRepository } from './repositories/healthRepository.js';
 import { createInsightsRepository } from './repositories/insightsRepository.js';
@@ -17,9 +18,20 @@ import { createEmployeeService } from './services/employeeService.js';
 import { createHealthService } from './services/healthService.js';
 import { createInsightsService } from './services/insightsService.js';
 
-export type AppDependencies = { db: Db; logger: Logger; clock?: Clock };
+export type AppDependencies = {
+  db: Db;
+  logger: Logger;
+  clock?: Clock;
+  /** Built client to serve alongside the API, so production runs as a single service. */
+  clientDistPath?: string;
+};
 
-export function createApp({ db, logger, clock = systemClock }: AppDependencies): Express {
+export function createApp({
+  db,
+  logger,
+  clock = systemClock,
+  clientDistPath,
+}: AppDependencies): Express {
   const app = express();
   app.disable('x-powered-by');
   app.use(requestLogger(logger));
@@ -37,6 +49,7 @@ export function createApp({ db, logger, clock = systemClock }: AppDependencies):
   app.use('/api', insightsRoutes(insightsController));
 
   app.use('/api', apiNotFound);
+  if (clientDistPath !== undefined) app.use(clientRoutes(clientDistPath));
   app.use(errorHandler(logger));
   return app;
 }

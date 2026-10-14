@@ -4,12 +4,18 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(4000),
   DATABASE_PATH: z.string().trim().min(1).default('data/salary.db'),
+  SEED_ON_EMPTY: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
 });
 
 export type Config = {
   env: z.infer<typeof envSchema>['NODE_ENV'];
   port: number;
   databasePath: string;
+  /** Seed demo data on boot when the employees table is empty, e.g. a fresh deployment. */
+  seedOnEmpty: boolean;
 };
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -24,5 +30,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     env: result.data.NODE_ENV,
     port: result.data.PORT,
     databasePath: result.data.DATABASE_PATH,
+    seedOnEmpty: result.data.SEED_ON_EMPTY,
   };
 }

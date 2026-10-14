@@ -19,3 +19,11 @@ export function seedDatabase(db: Db, options: GenerateOptions = DEFAULT_SEED_OPT
     salaryHistoryEntries: employees.reduce((sum, employee) => sum + employee.history.length, 0),
   };
 }
+
+/** Seeds only a database with no employees, so restarts never wipe real data. */
+export function seedIfEmpty(
+  db: Db,
+  options: GenerateOptions = DEFAULT_SEED_OPTIONS,
+): SeedResult | null {
+  return createSeedRepository(db).countEmployees() === 0 ? seedDatabase(db, options) : null;
+}

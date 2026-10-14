@@ -4,6 +4,9 @@ import type { SeedEmployee } from '../seed/generateEmployees.js';
 export type SeedRepository = ReturnType<typeof createSeedRepository>;
 
 export function createSeedRepository(db: Db) {
+  const countEmployees = db.prepare<[], { count: number }>(
+    'SELECT COUNT(*) AS count FROM employees',
+  );
   const insertEmployee = db.prepare<[Omit<SeedEmployee, 'history'> & { now: string }]>(
     `INSERT INTO employees (first_name, last_name, email, job_title, department, country, currency,
        salary_minor, hire_date, created_at, updated_at)
@@ -27,6 +30,8 @@ export function createSeedRepository(db: Db) {
   );
 
   return {
+    countEmployees: (): number => countEmployees.get()?.count ?? 0,
+
     /** Replaces all employees and history in one transaction, so a re-run starts from scratch. */
     replaceAll(employees: SeedEmployee[], now: string): void {
       db.transaction(() => {
