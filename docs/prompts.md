@@ -142,3 +142,27 @@ for client-side routes, so `npm run build && npm start` behaves like production 
 `SEED_ON_EMPTY=true` seeds only when there are no employees, so restarts never wipe data. The
 runtime image installs only the server's production dependencies and runs as the `node` user,
 with the database on a mounted disk. CI also checks formatting and builds the Docker image.
+
+## 11. Documentation and final audit (Phase 10)
+
+**Asked:** A README in a plain first-person-plural voice covering features, stack, quick start,
+scripts, env vars, API, tests, seeding, deployment, structure and limitations;
+`docs/tradeoffs.md` and `docs/performance.md` with measured numbers; a final audit for dead code
+and unused dependencies; lint, typecheck, tests and a production build; a clean install, seed and
+start from scratch hitting every endpoint; and a check that no secrets or database files are
+tracked.
+
+**Decided:** Measuring the list queries showed the salary sort was not using its index because
+currency and salary were ordered in opposite directions, so we changed it to sort both the same
+way (1.5 ms to 0.04 ms) in its own commit. The clean-clone check caught that better-sqlite3 13
+runs `node-gyp rebuild` on a fresh lockfile install, which fails without a C++ toolchain (and
+would have broken the slim Docker image), so we moved to version 12, which downloads a prebuilt
+binary. A dead-code scan found six exports used only inside
+their own module; they are now private. No unused dependencies were found. Measured numbers and
+the reasoning behind each index are in `performance.md`.
+
+## How the AI assistant was used
+
+Each phase above started from one instruction. The assistant proposed the concrete design,
+implemented it, ran lint, typecheck and tests until clean, checked the UI in a browser, and made
+the commit; the human reviewed each phase summary and gave the go-ahead for the next one.

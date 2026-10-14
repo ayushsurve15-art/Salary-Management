@@ -59,21 +59,21 @@ they cannot drift.
 
 All routes are under `/api` and exchange JSON. Ids are positive integers; anything else is a 400.
 
-| Method | Path                                 | Purpose                                                  |
-| ------ | ------------------------------------ | -------------------------------------------------------- |
-| GET    | `/health`                            | Liveness and database check                              |
-| GET    | `/meta`                              | Countries with currencies, departments, job titles       |
-| GET    | `/employees`                         | Paginated list with search, filters and sort             |
-| POST   | `/employees`                         | Create, with the initial salary as the first history row |
-| GET    | `/employees/:id`                     | One employee                                             |
-| PUT    | `/employees/:id`                     | Edit profile fields; requires `version`                  |
-| DELETE | `/employees/:id`                     | Delete with history                                      |
-| GET    | `/employees/:id/salary-history`      | History, newest first                                    |
-| POST   | `/employees/:id/salary-changes`      | Change salary; requires `version`                        |
-| GET    | `/insights/countries`                | Headcount, min, max, average, median per country         |
-| GET    | `/insights/groups?by=&currency=`     | Same stats per department or job title, for one currency |
-| GET    | `/insights/distribution?currency=`   | Salary bands for one currency                            |
-| GET    | `/insights/earners?currency=&limit=` | Top and bottom earners for one currency                  |
+| Method | Path                                 | Purpose                                                    |
+| ------ | ------------------------------------ | ---------------------------------------------------------- |
+| GET    | `/health`                            | Liveness and database check                                |
+| GET    | `/meta`                              | Countries with currencies, departments, job titles         |
+| GET    | `/employees`                         | Paginated list with search, filters and sort               |
+| POST   | `/employees`                         | Create, with the initial salary as the first history row   |
+| GET    | `/employees/:id`                     | One employee                                               |
+| PUT    | `/employees/:id`                     | Edit profile fields; requires `version`                    |
+| DELETE | `/employees/:id`                     | Delete with history                                        |
+| GET    | `/employees/:id/salary-history`      | History, newest first                                      |
+| POST   | `/employees/:id/salary-changes`      | Change salary; requires `version`                          |
+| GET    | `/insights/countries`                | Headcount, min, max, average, median, p25, p75 per country |
+| GET    | `/insights/groups?by=&currency=`     | Same stats per department or job title, for one currency   |
+| GET    | `/insights/distribution?currency=`   | Salary bands for one currency                              |
+| GET    | `/insights/earners?currency=&limit=` | Top and bottom earners for one currency                    |
 
 List query parameters: `page` (default 1), `pageSize` (default 25, max 100), `sort` (one of
 `name`, `email`, `country`, `department`, `jobTitle`, `salary`, `hireDate`), `order` (`asc` or
@@ -110,8 +110,8 @@ List query parameters: `page` (default 1), `pageSize` (default 25, max 100), `so
 Count, min, max and average are SQL aggregates grouped by currency and the chosen dimension. The
 average is rounded to the nearest minor unit.
 
-SQLite has no median, so each query also streams salaries ordered by group and amount using the
-`(currency, salary_minor)` index. A pure function then takes percentiles over each sorted group
+SQLite has no median, so each query also reads salaries ordered by group and amount (one pass
+over at most 10,000 integers). A pure function then takes percentiles over each sorted group
 with linear interpolation between the two closest ranks. That gives the textbook median for both
 odd and even counts, returns the single value for a one-row group, and returns `null` for an
 empty one. Keeping this in a pure function makes it easy to unit test with tiny fixtures.
@@ -175,4 +175,5 @@ views are shareable and survive a refresh.
 - WAL mode lets reads continue during writes.
 - On the client, search is debounced, and TanStack Query caches pages and keeps the previous page
   visible while the next one loads.
-- Measured numbers go in `performance.md` once the seed exists.
+- Measured numbers are in [performance.md](performance.md); trade-offs in more depth are in
+  [tradeoffs.md](tradeoffs.md).
