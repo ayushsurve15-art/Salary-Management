@@ -1,18 +1,17 @@
 import { COUNTRIES, findCountry, type Country } from '../domain/countries.js';
 import { toIsoDate, type Clock } from '../domain/dates.js';
-import type {
-  Employee,
-  EmployeeListQuery,
-  EmployeeUpdate,
-  NewEmployee,
-  Page,
-  SalaryChange,
-  SalaryHistoryEntry,
+import {
+  INITIAL_SALARY_REASON,
+  type Employee,
+  type EmployeeListQuery,
+  type EmployeeUpdate,
+  type NewEmployee,
+  type Page,
+  type SalaryChange,
+  type SalaryHistoryEntry,
 } from '../domain/employee.js';
 import { ConflictError, NotFoundError, ValidationError } from '../errors.js';
 import type { EmployeeRepository } from '../repositories/employeeRepository.js';
-
-export const INITIAL_SALARY_REASON = 'Initial salary';
 
 export type EmployeeMeta = {
   countries: readonly Country[];

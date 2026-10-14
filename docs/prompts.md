@@ -90,3 +90,17 @@ deterministic fixtures including empty and single-row groups.
 a pure interpolating `percentile` function over salaries streamed in sorted order. Department,
 job title, distribution and earner views all take a required `currency`. Bands are equal-width
 between the currency's min and max; a group where everyone earns the same gets one band.
+
+## 7. Seeding (Phase 6)
+
+**Asked:** A deterministic seed (seeded RNG, no network) creating exactly 10,000 employees across
+about 10 countries with plausible currencies, departments, job titles, salary ranges, hire dates,
+unique emails and initial salary history; idempotent; one transaction with prepared statements;
+a few seconds at most; tests for determinism and uniqueness.
+
+**Decided:** Mulberry32 as the seeded RNG. Salaries come from a per-country base salary times a
+per-role multiplier with ±20% spread, rounded to 100 major units, then walked back through 0–4
+historical raises so history ends exactly at the current salary. Re-running wipes and reinserts
+in one transaction, so the result is identical every time, timestamps included. The generated
+employees are checked against the API's own create schema. Measured: about 0.4 s for 10,000
+employees and ~26,500 history rows.

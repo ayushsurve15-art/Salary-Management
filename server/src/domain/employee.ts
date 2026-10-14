@@ -78,3 +78,5 @@ export type Page<T> = {
   total: number;
   totalPages: number;
 };
+
+export const INITIAL_SALARY_REASON = 'Initial salary';
