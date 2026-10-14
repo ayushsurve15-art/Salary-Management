@@ -1,5 +1,7 @@
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Link } from 'react-router';
 import { QueryError } from '../../components/QueryError';
 import { EmployeeFilters } from './EmployeeFilters';
 import { EmployeeTable } from './EmployeeTable';
@@ -18,11 +20,16 @@ export function EmployeesPage() {
         <Typography variant="h4" component="h1">
           Employees
         </Typography>
-        {list.data && (
-          <Typography color="text.secondary" aria-live="polite">
-            {list.data.total.toLocaleString()} found
-          </Typography>
-        )}
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+          {list.data && (
+            <Typography color="text.secondary" aria-live="polite">
+              {list.data.total.toLocaleString()} found
+            </Typography>
+          )}
+          <Button variant="contained" component={Link} to="/employees/new">
+            Add employee
+          </Button>
+        </Stack>
       </Stack>
       <EmployeeFilters params={params} meta={meta.data} onChange={updateParams} />
       {list.error ? (

@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { Layout } from './app/Layout';
 import { NotFoundPage } from './app/NotFoundPage';
+import { EmployeeDetailPage } from './features/employees/EmployeeDetailPage';
+import { CreateEmployeePage, EditEmployeePage } from './features/employees/EmployeeFormPages';
 import { EmployeesPage } from './features/employees/EmployeesPage';
 
 const theme = createTheme();
@@ -22,6 +24,9 @@ export function App() {
             <Route element={<Layout />}>
               <Route index element={<Navigate to="/employees" replace />} />
               <Route path="employees" element={<EmployeesPage />} />
+              <Route path="employees/new" element={<CreateEmployeePage />} />
+              <Route path="employees/:id" element={<EmployeeDetailPage />} />
+              <Route path="employees/:id/edit" element={<EditEmployeePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

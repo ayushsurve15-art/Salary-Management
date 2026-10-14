@@ -36,3 +36,10 @@ export function toMinorUnits(input: string, currency: string): number | null {
   if (fraction.length > digits) return null;
   return Number(whole) * 10 ** digits + Number(fraction.padEnd(digits, '0') || '0');
 }
+
+/** The inverse of {@link toMinorUnits}, for pre-filling inputs. */
+export function fromMinorUnits(minor: number, currency: string): string {
+  const digits = fractionDigits(currency);
+  const factor = 10 ** digits;
+  return minor % factor === 0 ? String(minor / factor) : (minor / factor).toFixed(digits);
+}

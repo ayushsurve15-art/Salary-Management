@@ -11,9 +11,14 @@ export class ApiError extends Error {
     this.name = 'ApiError';
   }
 
-  /** Field-level messages keyed by field name, for showing next to form inputs. */
-  fieldErrors(): Record<string, string> {
-    return Object.fromEntries(this.details.map((detail) => [detail.path, detail.message]));
+  /**
+   * Field-level messages keyed by field name, for showing next to form inputs. `renames` maps
+   * API field names to form field names where they differ.
+   */
+  fieldErrors(renames: Record<string, string> = {}): Record<string, string> {
+    return Object.fromEntries(
+      this.details.map((detail) => [renames[detail.path] ?? detail.path, detail.message]),
+    );
   }
 }
 
