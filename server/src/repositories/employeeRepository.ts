@@ -123,8 +123,9 @@ export function buildWhereClause(filters: EmployeeFilters): { where: string; par
 
 export function buildOrderBy(sort: SortField, order: 'asc' | 'desc'): string {
   const direction = order === 'asc' ? 'ASC' : 'DESC';
-  // Amounts in different currencies are not comparable, so salary order is per currency.
-  const prefix = sort === 'salary' ? ['currency ASC'] : [];
+  // Amounts in different currencies are not comparable, so salary order is per currency. Using the
+  // same direction for both lets SQLite walk the (currency, salary_minor) index either way.
+  const prefix = sort === 'salary' ? [`currency ${direction}`] : [];
   const columns = SORT_COLUMNS[sort].map((column) => `${column} ${direction}`);
   return `ORDER BY ${[...prefix, ...columns, `id ${direction}`].join(', ')}`;
 }

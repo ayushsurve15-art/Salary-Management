@@ -127,13 +127,19 @@ describe('employee API', () => {
       expect(descending.items.map((e) => e.lastName)).toEqual(['Turing', 'Lovelace', 'Hopper']);
     });
 
-    it('sorts salary within each currency', async () => {
-      const page = await listEmployees({ sort: 'salary', order: 'desc' });
+    it('sorts salary within each currency, never across currencies', async () => {
+      const ascending = await listEmployees({ sort: 'salary', order: 'asc' });
+      const descending = await listEmployees({ sort: 'salary', order: 'desc' });
 
-      expect(page.items.map((e) => [e.currency, e.salaryMinor])).toEqual([
+      expect(ascending.items.map((e) => [e.currency, e.salaryMinor])).toEqual([
+        ['GBP', 6_500_000],
+        ['GBP', 8_000_000],
+        ['USD', 15_000_000],
+      ]);
+      expect(descending.items.map((e) => [e.currency, e.salaryMinor])).toEqual([
+        ['USD', 15_000_000],
         ['GBP', 8_000_000],
         ['GBP', 6_500_000],
-        ['USD', 15_000_000],
       ]);
     });
 
