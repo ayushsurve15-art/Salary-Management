@@ -6,14 +6,21 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NavLink, Outlet } from 'react-router';
 
-const NAV_ITEMS = [{ to: '/employees', label: 'Employees' }];
+const NAV_ITEMS = [
+  { to: '/employees', label: 'Employees' },
+  { to: '/insights', label: 'Insights' },
+];
 
 export function Layout() {
   return (
     <>
       <AppBar position="static" elevation={0}>
         <Toolbar sx={{ gap: 3 }}>
-          <Typography variant="h6" component="span" sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="h6"
+            component="span"
+            sx={{ fontWeight: 600, fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          >
             Salary Management
           </Typography>
           <Stack component="nav" aria-label="Main" direction="row" spacing={1}>

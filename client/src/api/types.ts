@@ -75,3 +75,37 @@ export type SalaryChangeInput = {
   reason: string;
   version: number;
 };
+
+export type GroupStats = {
+  key: string;
+  currency: string;
+  headcount: number;
+  min: number;
+  max: number;
+  average: number;
+  median: number | null;
+  p25: number | null;
+  p75: number | null;
+};
+
+export type CountryStats = GroupStats & { countryName: string };
+
+export type GroupDimension = 'department' | 'jobTitle';
+
+export type SalaryBand = { from: number; to: number; count: number };
+
+export type Distribution = { currency: string; bands: SalaryBand[] };
+
+export type Earner = Pick<
+  Employee,
+  | 'id'
+  | 'firstName'
+  | 'lastName'
+  | 'jobTitle'
+  | 'department'
+  | 'country'
+  | 'currency'
+  | 'salaryMinor'
+>;
+
+export type Earners = { currency: string; top: Earner[]; bottom: Earner[] };

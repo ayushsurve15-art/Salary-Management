@@ -7,6 +7,7 @@ import { NotFoundPage } from './app/NotFoundPage';
 import { EmployeeDetailPage } from './features/employees/EmployeeDetailPage';
 import { CreateEmployeePage, EditEmployeePage } from './features/employees/EmployeeFormPages';
 import { EmployeesPage } from './features/employees/EmployeesPage';
+import { InsightsPage } from './features/insights/InsightsPage';
 
 const theme = createTheme();
 
@@ -27,6 +28,7 @@ export function App() {
               <Route path="employees/new" element={<CreateEmployeePage />} />
               <Route path="employees/:id" element={<EmployeeDetailPage />} />
               <Route path="employees/:id/edit" element={<EditEmployeePage />} />
+              <Route path="insights" element={<InsightsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
