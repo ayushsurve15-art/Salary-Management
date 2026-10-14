@@ -25,3 +25,15 @@ beyond the requirements doc; when a decision is ambiguous, take the simpler opti
 `tsconfig.base.json`; ESLint (flat config, type-aware rules) plus Prettier at the root; Vitest as
 the single test runner on both sides; root scripts for `dev`, `build`, `start`, `seed`, `test`,
 `lint` and `typecheck`.
+
+## 2. Requirements doc (Phase 1)
+
+**Asked:** Write a strictly one-page `docs/requirements.md` covering goal, user, core features,
+non-goals with reasoning and assumptions. Features: a server-side paginated, sortable, searchable
+and filterable employee list; employee create/edit/delete with validation; salary changes with
+effective date, reason and history; and an insights dashboard per country, department and job
+title with distribution bands and top/bottom earners, never summing across currencies.
+
+**Decided:** Salary is stored as integer minor units with an ISO 4217 code. All aggregates and
+rankings are grouped by currency. Concurrent edits are detected rather than overwritten. Bulk
+import/export was added to the non-goals as a natural next step rather than an MVP feature.
