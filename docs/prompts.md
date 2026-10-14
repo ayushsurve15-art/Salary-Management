@@ -37,3 +37,16 @@ title with distribution bands and top/bottom earners, never summing across curre
 **Decided:** Salary is stored as integer minor units with an ISO 4217 code. All aggregates and
 rankings are grouped by currency. Concurrent edits are detected rather than overwritten. Bulk
 import/export was added to the non-goals as a natural next step rather than an MVP feature.
+
+## 3. Design and architecture (Phase 2)
+
+**Asked:** Write `docs/design.md` and `docs/architecture.md` (with a Mermaid diagram) covering the
+data model, API, indexing, money handling, pagination, median/percentile computation, optimistic
+concurrency, error format, trade-offs and performance.
+
+**Decided:** Two tables, no lookup tables. Current salary is denormalised onto `employees` and kept
+in sync with history in one transaction. Offset pagination capped at 100 per page; sort columns
+whitelisted. Salary filters and sorts are scoped to a currency. Medians use linear interpolation
+in a pure function over salaries streamed in sorted order. Edits and salary changes carry a
+`version` and return 409 when stale. Currency must match the country; country is fixed after
+creation; salary changes cannot be future-dated.

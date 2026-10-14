@@ -18,7 +18,7 @@ spreadsheets, not with SQL.
    country, department, job title and salary range. Every interaction stays under a second at
    10,000 rows.
 2. **Create, edit and delete employees,** with validation that matches between UI and API
-   (required fields, valid email unique regardless of case, positive whole-unit salary within a
+   (required fields, valid email unique regardless of case, positive salary within a
    sane ceiling, a supported currency). Concurrent edits are detected rather than silently
    overwritten.
 3. **Salary changes** recorded with an effective date and a reason. Each employee has a salary
