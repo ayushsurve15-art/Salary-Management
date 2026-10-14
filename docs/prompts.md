@@ -64,3 +64,18 @@ constraints as a second line of defence behind Zod. Logging is a tiny JSON-lines
 than a logging library, since we only need one line per request and per error. The app is built
 by a `createApp({ db, logger })` factory so tests run against an in-memory database with
 Supertest. Test files are excluded from the production build via `tsconfig.build.json`.
+
+## 5. Employee API (Phase 4)
+
+**Asked:** CRUD plus a paginated, sortable, filterable, searchable list with whitelisted sort
+columns, parameterised queries and a capped page size; a salary-change endpoint that writes
+history in one transaction; and tests for the listed edge cases (bad salaries, unsupported
+currency, duplicate email, unknown and malformed ids, out-of-range pages, blank names, email
+normalisation, effective-date bounds, stale versions, deleting with history). Separate feat and
+test commits.
+
+**Decided:** Emails are trimmed and lower-cased; uniqueness is also enforced by a `NOCASE` unique
+column. Oversized page sizes are capped to 100 rather than rejected. Unknown body fields are
+rejected, which is also how a country change on edit is refused. A hire date cannot move past
+the first salary date. The service takes an injectable clock so date rules test
+deterministically. `GET /api/meta` serves the filter options.
